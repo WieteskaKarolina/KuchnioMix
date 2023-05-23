@@ -1,10 +1,9 @@
-require('dotenv').config(); // Wczytaj zmienne z pliku .env
-const pgp = require('pg-promise')();
-const db = pgp({
-  host: process.env.PGHOST,
-  database: process.env.PGDATABASE,
-  user: process.env.PGUSER,
-  password: process.env.PGPASSWORD
-});
+const postgres = require('postgres');
+require('dotenv').config();
 
-module.exports = db;
+const { PGHOST, PGDATABASE, PGUSER, PGPASSWORD, ENDPOINT_ID } = process.env;
+const URL = `postgres://${PGUSER}:${PGPASSWORD}@${PGHOST}/${PGDATABASE}?options=project%3D${ENDPOINT_ID}`;
+
+const sql = postgres(URL, { ssl: 'require' });
+
+module.exports = sql;
