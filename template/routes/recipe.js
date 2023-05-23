@@ -3,15 +3,16 @@ const router = express.Router();
 const db = require('../db');
 
 router.get('/', (req, res) => {
-  db.query('SELECT * FROM recipes')
-    .then(results => {
-      const recipes = results.rows;
-      res.render('recipe_show', { recipes });
-    })
-    .catch(error => {
-      console.error('Błąd podczas pobierania przepisów', error);
-      res.status(500).send('Błąd serwera');
-    });
+  // db.query('SELECT * FROM recipes')
+  //   .then(results => {
+  //     const recipes = results.rows;
+  //     res.render('recipe_show', { recipes });
+  //   })
+  //   .catch(error => {
+  //     console.error('Błąd podczas pobierania przepisów', error);
+  //     res.status(500).send('Błąd serwera');
+  //   });
+    res.render('recipe_show');
 });
 
 router.post('/add', (req, res) => {
