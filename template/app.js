@@ -6,13 +6,20 @@ const loginRoute = require(__dirname + '/routes/login');
 const recipeRoute = require(__dirname + '/routes/recipe');
 const editRecipeRoute = require(__dirname + '/routes/edit_recipe');
 const addRecipeRoute = require(__dirname + '/routes/add_recipe');
-
+const path = require('path');
 
 
 const app = express();
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
+app.use(express.static(path.join(__dirname, 'scripts')));
+
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/styles', express.static(__dirname + '/styles'));
+
+
 
 app.use(session({
     secret: 'my_secret_key',
