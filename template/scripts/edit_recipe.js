@@ -4,15 +4,15 @@ const check = document.getElementById('check');
 
 let przepis = '{ "nazwa" :"nalesniki", '+
 '"kroki":[' +
-'{ "czynnosc":"dodaj" , "ilosc":"250", "jedostkaIlosci":"ml","skladnik":"mleko","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"200", "jedostkaIlosci":"g","skladnik":"mąka pszenna","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"150", "jedostkaIlosci":"ml","skladnik":"woda","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"2", "jedostkaIlosci":"sztuki","skladnik":"jajka","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"0.5", "jedostkaIlosci":"łyżeczki","skladnik":"sól","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"0.5", "jedostkaIlosci":"łyżeczki","skladnik":"cukier","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"mieszaj" , "ilosc":"0", "jedostkaIlosci":"-","skladnik":"-","czas":"5","jednostkaCzasu":"min" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"20", "jedostkaIlosci":"ml","skladnik":"olej","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"mieszaj" , "ilosc":"0", "jedostkaIlosci":"-","skladnik":"-","czas":"1","jednostkaCzasu":"min" }' +
+'{ "czynnosc":"dodaj" , "ilosc":"250", "jedostkaIlosci":"ml","kategoria":"sypkie","skladnik":"mleko","czas":"0","jednostkaCzasu":"-" },' +
+'{ "czynnosc":"dodaj" , "ilosc":"200", "jedostkaIlosci":"g","kategoria":"sypkie","skladnik":"mąka pszenna","czas":"0","jednostkaCzasu":"-" },' +
+'{ "czynnosc":"dodaj" , "ilosc":"150", "jedostkaIlosci":"ml","kategoria":"stale","skladnik":"woda","czas":"0","jednostkaCzasu":"-" },' +
+'{ "czynnosc":"dodaj" , "ilosc":"2", "jedostkaIlosci":"sztuki","kategoria":"stale","skladnik":"jajka","czas":"0","jednostkaCzasu":"-" },' +
+'{ "czynnosc":"dodaj" , "ilosc":"0.5", "jedostkaIlosci":"łyżeczki","kategoria":"ciekle","skladnik":"sól","czas":"0","jednostkaCzasu":"-" },' +
+'{ "czynnosc":"dodaj" , "ilosc":"0.5", "jedostkaIlosci":"łyżeczki","kategoria":"ciekle","skladnik":"cukier","czas":"0","jednostkaCzasu":"-" },' +
+'{ "czynnosc":"mieszaj" , "ilosc":"0", "jedostkaIlosci":"-","kategoria":"sypkie","skladnik":"-","czas":"5","jednostkaCzasu":"min" },' +
+'{ "czynnosc":"dodaj" , "ilosc":"20", "jedostkaIlosci":"ml","kategoria":"sypkie","skladnik":"olej","czas":"0","jednostkaCzasu":"-" },' +
+'{ "czynnosc":"mieszaj" , "ilosc":"0", "jedostkaIlosci":"-","kategoria":"sypkie","skladnik":"-","czas":"1","jednostkaCzasu":"min" }' +
 ']}';
 
 
@@ -31,6 +31,44 @@ listOfItemsForJsonIloscCzasu=[]
 listaJednostek=["kg","l","dg","-","ml","sztuki"]//tutaj przypisac dostepne jednostki z bazy danych
 listaSkladnikow=["marchew","banan","koperek","-","mleko","mąka pszenna","woda","jajka","sól","cukier","olej"]//tutaj przypisac dostepe skladniki
 listaCzynnosci=["mieszaj","dodaj","miksuj","pokroj"]//tutaj przypisac dostepe skladniki
+listaKategori=["sypkie","ciekle","stale"]
+listaSkladnikoIrazKategori='{'+
+  ' "skladniki":['+
+  ' {"skladnik":"marchew", "kategoria":"sypkie"},'+
+  ' {"skladnik":"banan", "kategoria":"sypkie"},'+
+  ' {"skladnik":"mleko", "kategoria":"ciekle"},'+
+  ' {"skladnik":"woda", "kategoria":"ciekle"},'+
+  ' {"skladnik":"koperek", "kategoria":"stale"},'+
+  ' {"skladnik":"jajko", "kategoria":"stale"},'+
+  '  {"skladnik":"-", "kategoria":"-"}'+
+  ' ]}'
+
+var jsonSkladniki=JSON.parse(listaSkladnikoIrazKategori)
+
+dl = document.createElement('datalist');
+dl.id = 'kategorie';
+for (i=0; i < listaKategori.length; i += 1) {
+  var option = document.createElement('option');
+  option.value = listaKategori[i];
+  dl.appendChild(option);
+
+  skladnikDataList=document.createElement('datalist');
+  skladnikDataList.id=listaKategori[i];
+  for(var {skladnik,kategoria} of jsonSkladniki.skladniki)
+  {
+    if(kategoria===listaKategori[i])
+    {
+      var option2 = document.createElement('option');
+      option2.value = skladnik;
+      skladnikDataList.appendChild(option2);
+    }
+  }
+  document.body.appendChild(skladnikDataList)
+
+}
+document.body.appendChild(dl)
+
+
 
 
 
@@ -41,7 +79,7 @@ createList();
 function createList() {
   var json=JSON.parse(przepis)
   var index=0;
-  for(var {czynnosc,ilosc,jedostkaIlosci,skladnik,czas,jednostkaCzasu} of json.kroki)
+  for(var {czynnosc,ilosc,jedostkaIlosci,kategoria,skladnik,czas,jednostkaCzasu} of json.kroki)
     {
       const listItem = document.createElement('li');
 
@@ -53,7 +91,8 @@ function createList() {
           <select name="czynnosc" id="selectCzynnosc${index+1}"> </select>
           <input type="number" min=0  oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" id="fname" name="ilosc" placeholder="podaj ilosc" value=${ilosc}>
           <select name="unit" id="selectUnit${index+1}"> </select>
-          <select name="skladnik" id="selectSkladnik${index+1}"> </select>
+          <input list="kategorie" name="kategoria" id="selectKategoria${index+1}" value="${kategoria}"> </input>
+          <input list="${kategoria}" name="skladnik" id="selectSkladnik${index+1}" value="${skladnik}"> </input>
           <input type="number" min=0 oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" id="fname" name="iloscCzasu" placeholder="podaj Czas" value=${czas}>
           <select name="czas" id="selectCzas${index+1}">
             <option value="h">h</option>
@@ -85,19 +124,21 @@ function createList() {
         el.value = opt;
         select.appendChild(el);
       }
+      const inputSkladniki = document.getElementById("selectKategoria"+(index+1));
+      const selectId="selectSkladnik"+(index+1)
+      inputSkladniki.addEventListener('click', function () {
+        this.value=""
 
-      var select = document.getElementById("selectSkladnik"+(index+1));
-      for(var i = 0; i < listaSkladnikow.length; i++) {
-        var opt = listaSkladnikow[i];
-        var el = document.createElement("option");
-        if(skladnik==opt)
-        {
-          el.setAttribute("selected","selected")
-        }
-        el.textContent = opt;
-        el.value = opt;
-        select.appendChild(el);
-      }
+      });
+      inputSkladniki.addEventListener('input', function () {
+        listId=this.value
+        document.getElementById(selectId).setAttribute('list',listId)
+        document.getElementById(selectId).value=''
+        console.log(selectId)
+        generateListofItems()
+
+      });
+
 
       var select = document.getElementById("selectCzynnosc"+(index+1));
       for(var i = 0; i < listaCzynnosci.length; i++) {
@@ -128,24 +169,30 @@ function generateListofItems()
   listOfItemsForJsonSkaldniki=[]
   listOfItemsForJsonCzas=[]
   listOfItemsForJsonIloscCzasu=[]
+  listOfKategorieForJson=[]
 
 
   const inputsList=document.getElementById("draggable-list").getElementsByTagName("input");
 
   Array.from(inputsList).forEach(el=>
     {
-      if(el.name=="krok")
-        {
-          listOfItemsForJson.push(el.value);
-        }
-      if(el.name=="ilosc")
+
+      if(el.name==="ilosc")
         {
           listOfItemsForJson2.push(el.value);
         }
-        if(el.name=="iloscCzasu")
+        if(el.name==="iloscCzasu")
         {
           listOfItemsForJsonIloscCzasu.push(el.value);
         }
+      if(el.name==="skladnik")
+      {
+        listOfItemsForJsonSkaldniki.push(el.value);
+      }
+      if(el.name==="kategoria")
+      {
+        listOfKategorieForJson.push(el.value);
+      }
         
     });
 
@@ -153,24 +200,25 @@ function generateListofItems()
 
     Array.from(selectsList).forEach(el=>
       {
-        if(el.name=="unit")
+        if(el.name==="unit")
           {
             listOfItemsForJsonJednostki.push(el.options[el.selectedIndex].text);
           }
-        if(el.name=="skladnik")
-          {
-            listOfItemsForJsonSkaldniki.push(el.options[el.selectedIndex].text);
-          }
-        if(el.name=="czas")
+
+        if(el.name==="czas")
           {
             listOfItemsForJsonCzas.push(el.options[el.selectedIndex].text);
           }
+        if(el.name==="czynnosc")
+        {
+          listOfItemsForJson.push(el.options[el.selectedIndex].text);
+        }
       });
       obj = JSON.parse(przepis);
       obj['kroki']=[]
      for(var i=0;i<listOfItemsForJson.length;i++)
       {
-        obj['kroki'].push({ "czynnosc":listOfItemsForJson[i] , "ilosc":listOfItemsForJson2[i], "jedostkaIlosci":listOfItemsForJsonJednostki[i],"skladnik":listOfItemsForJsonSkaldniki[i],"czas":listOfItemsForJsonIloscCzasu[i],"jednostkaCzasu":listOfItemsForJsonCzas[i] })
+        obj['kroki'].push({ "czynnosc":listOfItemsForJson[i] , "ilosc":listOfItemsForJson2[i], "jedostkaIlosci":listOfItemsForJsonJednostki[i],"kategoria":listOfKategorieForJson[i],"skladnik":listOfItemsForJsonSkaldniki[i],"czas":listOfItemsForJsonIloscCzasu[i],"jednostkaCzasu":listOfItemsForJsonCzas[i] })
       }
       przepis=JSON.stringify(obj)
       
@@ -257,10 +305,11 @@ function checkOrder() {
         <div class="draggable" draggable="true">
         <select name="czynnosc" id="selectCzynnosc${index+1}"> </select>
         <input type="number" min=0 oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" id="fname" name="ilosc" placeholder="podaj ilosc">
-          <select id="selectUnit${index+1}"> </select>
-          <select id="selectSkladnik${index+1}"> </select>
+          <select id="selectUnit${index+1}" name="unit"> </select>
+          <input list="kategorie" name="kategoria" id="selectKategoria${index+1}"> </input>
+          <input list="" name="skladnik" id="selectSkladnik${index+1}"> </input>
           <input type="number" min=0 oninput="this.value = !!this.value && Math.abs(this.value) >= 0 ? Math.abs(this.value) : null" id="fname" name="iloscCzasu" placeholder="podaj Czas">
-          <select id="selectCzas${index+1}">
+          <select id="selectCzas${index+1}" name="czas">
             <option value="h">h</option>
             <option value="min">min</option>
             <option value="s">s</option>
@@ -275,8 +324,6 @@ function checkOrder() {
       listItems.push(listItem);
 
       draggable_list.appendChild(listItem);
-      addEventListeners()
-      generateListofItems()
 
       window.scrollTo(0, document.body.scrollHeight);
 
@@ -289,14 +336,27 @@ function checkOrder() {
         select.appendChild(el);
       }
 
-      var select = document.getElementById("selectSkladnik"+(index+1));
-      for(var i = 0; i < listaSkladnikow.length; i++) {
-        var opt = listaSkladnikow[i];
-        var el = document.createElement("option");
-        el.textContent = opt;
-        el.value = opt;
-        select.appendChild(el);
-      }
+      var inputSkladniki = document.getElementById("selectKategoria"+(index+1));
+      const selectId="selectSkladnik"+(index+1)
+      inputSkladniki.addEventListener('click', function () {
+        this.value=""
+
+      });
+      inputSkladniki.addEventListener('input', function () {
+        listId=this.value
+        document.getElementById(selectId).setAttribute('list',listId)
+        document.getElementById(selectId).value=""
+        console.log(selectId)
+        generateListofItems()
+
+      });
+      // for(var i = 0; i < listaSkladnikow.length; i++) {
+      //   var opt = listaSkladnikow[i];
+      //   var el = document.createElement("option");
+      //   el.textContent = opt;
+      //   el.value = opt;
+      //   select.appendChild(el);
+      // }
       var select = document.getElementById("selectCzynnosc"+(index+1));
       for(var i = 0; i < listaCzynnosci.length; i++) {
         var opt = listaCzynnosci[i];
@@ -309,6 +369,8 @@ function checkOrder() {
         el.value = opt;
         select.appendChild(el);
       }
+  addEventListeners()
+  generateListofItems()
 
   
 }
