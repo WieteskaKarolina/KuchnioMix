@@ -13,8 +13,6 @@ const app = express();
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
-app.use(express.static(path.join(__dirname, 'scripts')));
-
 app.use('/images', express.static(__dirname + '/images'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/styles', express.static(__dirname + '/styles'));
