@@ -3,7 +3,7 @@ const session = require('express-session');
 const mysql = require('mysql');
 const registerRoute = require(__dirname + '/routes/register');
 const loginRoute = require(__dirname + '/routes/login');
-
+const recipeRoute = require(__dirname + '/routes/recipe');
 
 
 const connection = mysql.createConnection({
@@ -16,6 +16,8 @@ const connection = mysql.createConnection({
 
 const app = express();
 app.use('/images', express.static(__dirname + '/images'));
+app.use('/scripts', express.static(__dirname + '/scripts'));
+app.use('/styles', express.static(__dirname + '/styles'));
 
 app.use(session({
     secret: 'my_secret_key',
@@ -29,7 +31,7 @@ app.get('/', (req, res) => {
 
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
-
+app.use('/recipe', recipeRoute);
 
   
 
