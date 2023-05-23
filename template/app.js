@@ -4,8 +4,8 @@ const db = require('./db');
 const registerRoute = require(__dirname + '/routes/register');
 const loginRoute = require(__dirname + '/routes/login');
 const recipeRoute = require(__dirname + '/routes/recipe');
-const editRecipeRoute = require(__dirname + '/routes/recipe');
-const addRecipeRoute = require(__dirname + '/routes/recipe');
+const editRecipeRoute = require(__dirname + '/routes/edit_recipe');
+const addRecipeRoute = require(__dirname + '/routes/add_recipe');
 
 
 
