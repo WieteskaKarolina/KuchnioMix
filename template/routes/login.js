@@ -7,25 +7,33 @@ const path = require('path');
 let oneStepBack = path.join(__dirname, '../');
 
 router.get('/', (req, res) => {
-  res.sendFile(oneStepBack + '/views/register.html');
+  res.sendFile(oneStepBack + '/views/login.html');
 });
 
 router.post('/', async (req, res) => {
-  const { login, password } = req.body;
-  if (!login || !password) {
+  const { name, password } = req.body;
+  if (!name || !password) {
     return res.status(400).send('Invalid input data');
   }
 
   try {
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    const [user] = await sql`SELECT * FROM uzytkownicy WHERE login = ${name}`;
 
-    await sql`INSERT INTO uzytkownicy (login, haslo, rola) VALUES (${login}, ${hashedPassword}, 'uzytkownik')`;
+    if (!user) {
+      return res.status(401).send('Invalid username or password');
+    }
 
-    return res.status(200).send('User registered successfully');
+    const match = await bcrypt.compare(password, user.haslo);
+    if (!match) {
+      return res.status(401).send('Invalid username or password');
+    }
+
+    req.session.user = user;
+
+    return res.status(200).send('Logged in successfully');
   } catch (error) {
-    console.error('Error registering user', error);
-    return res.status(500).send('Error registering user');
+    console.error('Error logging in', error);
+    return res.status(500).send('Error logging in');
   }
 });
 

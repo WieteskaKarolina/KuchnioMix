@@ -22,6 +22,19 @@ router.post('/', async (req, res) => {
 
     await sql`INSERT INTO uzytkownicy (id, login, haslo, rola) VALUES (DEFAULT, ${login}, ${hashedPassword}, 'uzytkownik')`;
 
+    const [user] = await sql`SELECT * FROM uzytkownicy WHERE login = ${login}`;
+
+    if (!user) {
+      return res.status(401).send('Invalid username or password');
+    }
+
+    const match = await bcrypt.compare(password, user.haslo);
+    if (!match) {
+      return res.status(401).send('Invalid username or password');
+    }
+
+    req.session.user = user;
+
     return res.status(200).send('User registered successfully');
   } catch (error) {
     console.error('Error registering user', error);

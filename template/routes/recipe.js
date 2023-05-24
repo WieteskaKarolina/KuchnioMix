@@ -5,7 +5,7 @@ const sql = require('../db');
 
 router.get('/', async (req, res) => {
   try {
-    const results = await sql`SELECT * FROM recipes`;
+    const results = await sql`SELECT * FROM przepisy`;
     const recipes = results.rows;
     res.render('recipe_show', { recipes });
   } catch (error) {
@@ -15,10 +15,10 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/add', async (req, res) => {
-  const { title, description } = req.body;
+  const { nazwa_przepisu, przepisy } = req.body;
 
   try {
-    await sql`INSERT INTO recipes (title, description) VALUES (${title}, ${description})`;
+    await sql`INSERT INTO przepisy (nazwa_przepisu, przepisy) VALUES (${nazwa_przepisu}, ${przepisy})`;
     res.redirect('/recipe');
   } catch (error) {
     console.error('Błąd podczas dodawania przepisu', error);
@@ -30,7 +30,7 @@ router.get('/download/:recipeId', async (req, res) => {
   const recipeId = req.params.recipeId;
 
   try {
-    const results = await sql`SELECT * FROM recipes WHERE id = ${recipeId}`;
+    const results = await sql`SELECT * FROM przepisy WHERE id = ${recipeId}`;
     const recipe = results.rows[0];
     const recipeJson = JSON.stringify(recipe);
 

@@ -8,7 +8,6 @@ const editRecipeRoute = require(__dirname + '/routes/edit_recipe');
 const addRecipeRoute = require(__dirname + '/routes/add_recipe');
 const path = require('path');
 
-
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -17,25 +16,32 @@ app.use('/images', express.static(__dirname + '/images'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/styles', express.static(__dirname + '/styles'));
 
-app.use(express.json()); 
+app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-    secret: 'my_secret_key',
-    resave: false,
-    saveUninitialized: true
-  }));
+  secret: 'my_secret_key',
+  resave: false,
+  saveUninitialized: true
+}));
 
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/views/home.html');
-  });
+const checkAuthentication = (req, res, next) => {
+  if (req.session && req.session.user) {
+    next();
+  } else {
+    res.render('home_before_login', { user: req.session.user });
+  }
+};
+
+app.get('/', checkAuthentication, (req, res) => {
+  res.render('home_after_login', { user: req.session.user });
+});
 
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
-app.use('/recipe', recipeRoute);
-app.use('/addRecipe', addRecipeRoute);
-app.use('/editRecipe', editRecipeRoute);
-  
+app.use('/recipe', checkAuthentication, recipeRoute);
+app.use('/addRecipe', checkAuthentication, addRecipeRoute);
+app.use('/editRecipe', checkAuthentication, editRecipeRoute);
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');

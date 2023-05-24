@@ -34,15 +34,12 @@
           <li class="nav-item">
             <a class="nav-link" href="/">Home</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/login">Login</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/register">Register</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="/recipe">Tak wygląda przepis</a>
-          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/login">Login</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/register">Register</a>
+            </li>
         </ul>
       </div>
     </div>
@@ -81,7 +78,7 @@
           data: $(this).serialize(),
           success: function(response) {
             $('#message').removeClass('text-danger').addClass('text-success').text(response).show();
-            window.location.href = '/'; 
+            window.location.href = '/';
           },
           error: function(xhr, status, error) {
             $('#message').removeClass('text-success').addClass('text-danger').text(xhr.responseText).show();
