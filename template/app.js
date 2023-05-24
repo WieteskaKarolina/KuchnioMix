@@ -17,7 +17,8 @@ app.use('/images', express.static(__dirname + '/images'));
 app.use('/scripts', express.static(__dirname + '/scripts'));
 app.use('/styles', express.static(__dirname + '/styles'));
 
-
+app.use(express.json()); 
+app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
     secret: 'my_secret_key',

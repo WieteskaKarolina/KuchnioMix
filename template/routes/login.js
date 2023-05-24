@@ -1,43 +1,32 @@
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const sql = require('../db');
 
-const path=require('path');
-let oneStepBack=path.join(__dirname,'../');
+const path = require('path');
+let oneStepBack = path.join(__dirname, '../');
 
 router.get('/', (req, res) => {
-    res.sendFile(oneStepBack + '/views/login.html');
+  res.sendFile(oneStepBack + '/views/register.html');
 });
-  
-router.post('/', (req, res) => {
-    const { name, password } = req.body;
 
-    if (!name || !password) {
-        return res.status(400).send('Invalid input data');
-    }
+router.post('/', async (req, res) => {
+  const { login, password } = req.body;
+  if (!login || !password) {
+    return res.status(400).send('Invalid input data');
+  }
 
-    const query = 'SELECT * FROM users WHERE name = ?';
-    connection.query(query, [name], (err, results) => {
-        if (err) {
-        return res.status(500).send('Error retrieving user from database');
-        }
+  try {
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        if (results.length === 0) {
-        return res.status(401).send('Invalid name or password');
-        }
+    await sql`INSERT INTO uzytkownicy (login, haslo, rola) VALUES (${login}, ${hashedPassword}, 'uzytkownik')`;
 
-        bcrypt.compare(password, results[0].password, (err, isMatch) => {
-        if (err) {
-            return res.status(500).send('Error comparing passwords');
-        }
-
-        if (isMatch) {
-            req.session.user = results[0];
-            return res.status(200).send('Logged in successfully');
-        } else {
-            return res.status(401).send('Invalid name or password');
-        }
-        });
-    });
+    return res.status(200).send('User registered successfully');
+  } catch (error) {
+    console.error('Error registering user', error);
+    return res.status(500).send('Error registering user');
+  }
 });
 
 module.exports = router;
