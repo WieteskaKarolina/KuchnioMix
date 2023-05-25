@@ -37,6 +37,16 @@ app.get('/', checkAuthentication, (req, res) => {
   res.render('home_after_login', { user: req.session.user });
 });
 
+app.get('/logout', (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error destroying session', err);
+      return res.status(500).send('Error logging out');
+    }
+    res.redirect('/');
+  });
+});
+
 app.use('/register', registerRoute);
 app.use('/login', loginRoute);
 app.use('/recipe', checkAuthentication, recipeRoute);

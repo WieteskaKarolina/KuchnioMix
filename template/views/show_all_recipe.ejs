@@ -1,0 +1,41 @@
+<!-- recipes.ejs -->
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Moje przepisy</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+
+  <div class="container">
+    <h1>Moje przepisy</h1>
+    
+    <% if (recipes.length > 0) { %>
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Nazwa</th>
+            <th>Opis</th>
+            <!-- Dodaj inne kolumny, jeśli potrzebujesz -->
+          </tr>
+        </thead>
+        <tbody>
+          <% recipes.forEach((recipe) => { %>
+            <tr>
+              <td><%= recipe.name %></td>
+              <td><%= recipe.description %></td>
+              <!-- Dodaj inne kolumny, jeśli potrzebujesz -->
+            </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    <% } else { %>
+      <p>Brak przepisów do wyświetlenia.</p>
+    <% } %>
+
+  </div>
+
+</body>
+</html>

@@ -2,45 +2,49 @@ const express = require('express');
 const router = express.Router();
 const sql = require('../db');
 
+const checkAuthentication = (req, res, next) => {
+  if (req.session && req.session.user) {
+    next();
+  } else {
+    res.render('home_before_login', { user: req.session.user });
+  }
+};
 
-router.get('/', async (req, res) => {
+router.get('/', checkAuthentication, async (req, res) => {
+  const userId = req.session.user.id;
+
   try {
-    const results = await sql`SELECT * FROM przepisy`;
-    const recipes = results.rows;
-    res.render('recipe_show', { recipes });
+    const recipeIds = await sql`SELECT id_przepisu FROM przepisy_uzytkownikow WHERE id_uzytkownika = ${userId}`;
+    
+    const recipeIdArray = recipeIds.map(recipeId => recipeId.id_przepisu);
+
+    const recipes = await sql`SELECT * FROM przepisy WHERE id = ANY(${recipeIdArray})`;
+
+    res.render('show_all_recipe', { recipes });
   } catch (error) {
-    console.error('Błąd podczas pobierania przepisów', error);
-    res.status(500).send('Błąd serwera');
+    console.error('Error retrieving recipes', error);
+    res.status(500).send('Wystąpił błąd podczas pobierania przepisów');
   }
 });
 
-router.post('/add', async (req, res) => {
-  const { nazwa_przepisu, przepisy } = req.body;
+
+router.get('/:id/json', checkAuthentication, async (req, res) => {
+  const recipeId = req.params.id;
+  const userId = req.session.user.id;
 
   try {
-    await sql`INSERT INTO przepisy (nazwa_przepisu, przepisy) VALUES (${nazwa_przepisu}, ${przepisy})`;
-    res.redirect('/recipe');
+    const [recipe] = await sql`SELECT * FROM przepisy WHERE id = ${recipeId} AND id IN (SELECT id_przepisu FROM przepisy_uzytkownikow WHERE id_uzytkownika = ${userId})`;
+
+    if (!recipe) {
+      return res.status(404).send('Przepis nie został znaleziony');
+    }
+
+    res.json(recipe);
   } catch (error) {
-    console.error('Błąd podczas dodawania przepisu', error);
-    res.status(500).send('Błąd serwera');
+    console.error('Error retrieving recipe', error);
+    res.status(500).send('Wystąpił błąd podczas pobierania przepisu');
   }
 });
 
-router.get('/download/:recipeId', async (req, res) => {
-  const recipeId = req.params.recipeId;
-
-  try {
-    const results = await sql`SELECT * FROM przepisy WHERE id = ${recipeId}`;
-    const recipe = results.rows[0];
-    const recipeJson = JSON.stringify(recipe);
-
-    res.setHeader('Content-disposition', 'attachment; filename=recipe.json');
-    res.setHeader('Content-type', 'application/json');
-    res.send(recipeJson);
-  } catch (error) {
-    console.error('Błąd podczas pobierania przepisu', error);
-    res.status(500).send('Błąd serwera');
-  }
-});
 
 module.exports = router;
