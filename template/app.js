@@ -6,6 +6,8 @@ const loginRoute = require(__dirname + '/routes/login');
 const recipeRoute = require(__dirname + '/routes/recipe');
 const editRecipeRoute = require(__dirname + '/routes/edit_recipe');
 const addRecipeRoute = require(__dirname + '/routes/add_recipe');
+const addRecipeJsonRoute = require(__dirname + '/routes/add_recipe_json');
+
 const path = require('path');
 
 const app = express();
@@ -52,6 +54,8 @@ app.use('/login', loginRoute);
 app.use('/recipe', checkAuthentication, recipeRoute);
 app.use('/addRecipe', checkAuthentication, addRecipeRoute);
 app.use('/editRecipe', checkAuthentication, editRecipeRoute);
+app.use('/addRecipeJson', addRecipeJsonRoute);
+
 
 app.listen(3000, () => {
   console.log('Server started on port 3000');
