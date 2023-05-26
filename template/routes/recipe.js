@@ -10,6 +10,7 @@ const checkAuthentication = (req, res, next) => {
   }
 };
 
+
 router.get('/', checkAuthentication, async (req, res) => {
   const userId = req.session.user.id;
 
@@ -20,12 +21,18 @@ router.get('/', checkAuthentication, async (req, res) => {
 
     const recipes = await sql`SELECT * FROM przepisy WHERE id = ANY(${recipeIdArray})`;
 
+    recipes.forEach(recipe => {
+      const jsonRecipe = JSON.parse(recipe.przepisy);
+      recipe.nazwa = jsonRecipe.nazwa;
+    });
+
     res.render('show_all_recipe', { recipes });
   } catch (error) {
     console.error('Error retrieving recipes', error);
     res.status(500).send('Wystąpił błąd podczas pobierania przepisów');
   }
 });
+
 
 
 router.get('/:id/json', checkAuthentication, async (req, res) => {
@@ -39,12 +46,17 @@ router.get('/:id/json', checkAuthentication, async (req, res) => {
       return res.status(404).send('Przepis nie został znaleziony');
     }
 
-    res.json(recipe);
+    const jsonData = JSON.parse(recipe.przepisy); // Parse the JSON string in the 'przepisy.przepisy' column
+
+    res.setHeader('Content-Disposition', 'attachment; filename="recipe.json"'); // Set the filename for the downloaded file
+    res.setHeader('Content-Type', 'application/json');
+    res.send(jsonData);
   } catch (error) {
     console.error('Error retrieving recipe', error);
     res.status(500).send('Wystąpił błąd podczas pobierania przepisu');
   }
 });
+
 
 
 module.exports = router;

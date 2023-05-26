@@ -1,10 +1,7 @@
-<!-- recipes.ejs -->
-
 <!DOCTYPE html>
 <html>
 <head>
   <title>Moje przepisy</title>
-  <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
@@ -17,16 +14,16 @@
         <thead>
           <tr>
             <th>Nazwa</th>
-            <th>Opis</th>
-            <!-- Dodaj inne kolumny, jeśli potrzebujesz -->
+            <th>Akcje</th>
           </tr>
         </thead>
         <tbody>
           <% recipes.forEach((recipe) => { %>
             <tr>
-              <td><%= recipe.name %></td>
-              <td><%= recipe.description %></td>
-              <!-- Dodaj inne kolumny, jeśli potrzebujesz -->
+              <td><%= recipe.nazwa %></td>
+              <td>
+                <a href="/recipe/<%= recipe.id %>/json" class="btn btn-primary">Pobierz JSON</a> <!-- Add a "Download JSON" button -->
+              </td>
             </tr>
           <% }); %>
         </tbody>
