@@ -15,12 +15,7 @@ router.get('/', checkAuthentication, async (req, res) => {
   const userId = req.session.user.id;
 
   try {
-    const recipeIds = await sql`SELECT id_przepisu FROM przepisy_uzytkownikow WHERE id_uzytkownika = ${userId}`;
-    
-    const recipeIdArray = recipeIds.map(recipeId => recipeId.id_przepisu);
-
-    const recipes = await sql`SELECT * FROM przepisy WHERE id = ANY(${recipeIdArray})`;
-
+    const recipes = await sql`SELECT p.przepisy,p.id FROM przepisy_uzytkownikow pu join przepisy p ON pu.id_przepisu=p.id  where pu.id_uzytkownika= ${userId}`;
     recipes.forEach(recipe => {
       const jsonRecipe = JSON.parse(recipe.przepisy);
       recipe.nazwa = jsonRecipe.nazwa;

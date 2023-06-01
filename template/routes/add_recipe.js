@@ -5,7 +5,7 @@ const path = require('path');
 let oneStepBack = path.join(__dirname,'../');
 
 router.get('/', (req, res) => {
-    res.sendFile(oneStepBack + '/views/recipe_edit.html');
+    res.sendFile(oneStepBack + '/views/recipe_edit.ejs');
   });
 
 module.exports = router;

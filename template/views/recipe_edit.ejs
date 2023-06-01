@@ -21,9 +21,10 @@
       height: 100%;
       margin: 0;
       padding: 0;
-      overflow: hidden;
-      background-color: #eff1f3;
+      /*overflow: hidden;*/
+      background-color: #eff1f3 ;
     }
+
     .carousel {
       height: 100%;
     }
@@ -37,6 +38,14 @@
       object-fit: cover;
       height: 100%;
       width: 100%;
+    }
+    #save
+    {
+      text-decoration: none;
+    }
+    #save:hover
+    {
+      color: #34444f;
     }
   </style>
   </head>
@@ -66,16 +75,32 @@
          </div>
       </div>
     </nav>
-  
-    
+
+    <% var recipeEjs = JSON.stringify(recipe.przepisy)
+      var recipeIdEjs = idPrzepisu
+      recipeEjs="\'"+recipeEjs.substring(1,recipeEjs.length-1)+"\'"
+    %>
+    <script>
+      let przepis= <%-recipeEjs%>;
+      let idPrzepisu= <%-recipeIdEjs%>;
+    </script>
+
 
     <div class="main">
-        <h1>Stwórz swój własny przepis </h1>
-        <ul class="draggable-list" id="draggable-list"></ul>
+        <h1>Edytuj przepis </h1>
+      <input type="text" id="recipeName" class="form-control" placeholder="podaj nazwe przpisu">
+
+      <ul class="draggable-list" id="draggable-list"></ul>
         <button class="check-btn" id="check">
           Dodaj krok 
           <i class="fas fa-paper-plane"></i>
         </button>
+<!--      href="http://localhost:3000/recipe/"-->
+      <br>
+      <a  class="check-btn" id="save">
+        zapisz przepis
+        <i class="fas fa-paper-plane"></i>
+      </a>
     </div>
     
 

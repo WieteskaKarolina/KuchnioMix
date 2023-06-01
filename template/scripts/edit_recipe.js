@@ -2,18 +2,18 @@ const draggable_list = document.getElementById('draggable-list');
 const check = document.getElementById('check');
 
 
-let przepis = '{ "nazwa" :"nalesniki", '+
-'"kroki":[' +
-'{ "czynnosc":"dodaj" , "ilosc":"250", "jedostkaIlosci":"ml","kategoria":"sypkie","skladnik":"mleko","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"200", "jedostkaIlosci":"g","kategoria":"sypkie","skladnik":"mąka pszenna","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"150", "jedostkaIlosci":"ml","kategoria":"stale","skladnik":"woda","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"2", "jedostkaIlosci":"sztuki","kategoria":"stale","skladnik":"jajka","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"0.5", "jedostkaIlosci":"łyżeczki","kategoria":"ciekle","skladnik":"sól","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"0.5", "jedostkaIlosci":"łyżeczki","kategoria":"ciekle","skladnik":"cukier","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"mieszaj" , "ilosc":"0", "jedostkaIlosci":"-","kategoria":"sypkie","skladnik":"-","czas":"5","jednostkaCzasu":"min" },' +
-'{ "czynnosc":"dodaj" , "ilosc":"20", "jedostkaIlosci":"ml","kategoria":"sypkie","skladnik":"olej","czas":"0","jednostkaCzasu":"-" },' +
-'{ "czynnosc":"mieszaj" , "ilosc":"0", "jedostkaIlosci":"-","kategoria":"sypkie","skladnik":"-","czas":"1","jednostkaCzasu":"min" }' +
-']}';
+// let przepis = '{ "nazwa" :"nalesniki", '+
+// '"kroki":[' +
+// '{ "czynnosc":"dodaj" , "ilosc":"250", "jedostkaIlosci":"ml","kategoria":"sypkie","skladnik":"mleko","czas":"0","jednostkaCzasu":"-" },' +
+// '{ "czynnosc":"dodaj" , "ilosc":"200", "jedostkaIlosci":"g","kategoria":"sypkie","skladnik":"mąka pszenna","czas":"0","jednostkaCzasu":"-" },' +
+// '{ "czynnosc":"dodaj" , "ilosc":"150", "jedostkaIlosci":"ml","kategoria":"stale","skladnik":"woda","czas":"0","jednostkaCzasu":"-" },' +
+// '{ "czynnosc":"dodaj" , "ilosc":"2", "jedostkaIlosci":"sztuki","kategoria":"stale","skladnik":"jajka","czas":"0","jednostkaCzasu":"-" },' +
+// '{ "czynnosc":"dodaj" , "ilosc":"0.5", "jedostkaIlosci":"łyżeczki","kategoria":"ciekle","skladnik":"sól","czas":"0","jednostkaCzasu":"-" },' +
+// '{ "czynnosc":"dodaj" , "ilosc":"0.5", "jedostkaIlosci":"łyżeczki","kategoria":"ciekle","skladnik":"cukier","czas":"0","jednostkaCzasu":"-" },' +
+// '{ "czynnosc":"mieszaj" , "ilosc":"0", "jedostkaIlosci":"-","kategoria":"sypkie","skladnik":"-","czas":"5","jednostkaCzasu":"min" },' +
+// '{ "czynnosc":"dodaj" , "ilosc":"20", "jedostkaIlosci":"ml","kategoria":"sypkie","skladnik":"olej","czas":"0","jednostkaCzasu":"-" },' +
+// '{ "czynnosc":"mieszaj" , "ilosc":"0", "jedostkaIlosci":"-","kategoria":"sypkie","skladnik":"-","czas":"1","jednostkaCzasu":"min" }' +
+// ']}';
 
 
 // Store listitems
@@ -45,6 +45,9 @@ listaSkladnikoIrazKategori='{'+
 
 var jsonSkladniki=JSON.parse(listaSkladnikoIrazKategori)
 
+var inputName=document.getElementById("recipeName")
+
+
 dl = document.createElement('datalist');
 dl.id = 'kategorie';
 for (i=0; i < listaKategori.length; i += 1) {
@@ -68,8 +71,8 @@ for (i=0; i < listaKategori.length; i += 1) {
 }
 document.body.appendChild(dl)
 
-
-
+var json=JSON.parse(przepis)
+inputName.value=json['nazwa']
 
 
 
@@ -215,19 +218,16 @@ function generateListofItems()
         }
       });
       obj = JSON.parse(przepis);
+      obj['nazwa']=inputName.value
       obj['kroki']=[]
      for(var i=0;i<listOfItemsForJson.length;i++)
       {
         obj['kroki'].push({ "czynnosc":listOfItemsForJson[i] , "ilosc":listOfItemsForJson2[i], "jedostkaIlosci":listOfItemsForJsonJednostki[i],"kategoria":listOfKategorieForJson[i],"skladnik":listOfItemsForJsonSkaldniki[i],"czas":listOfItemsForJsonIloscCzasu[i],"jednostkaCzasu":listOfItemsForJsonCzas[i] })
       }
       przepis=JSON.stringify(obj)
-      
-     
-    
 }
 
 function dragStart() {
-  // console.log('Event: ', 'dragstart');
   dragStartIndex = +this.closest('li').getAttribute('data-index');
 }
 
@@ -350,13 +350,7 @@ function checkOrder() {
         generateListofItems()
 
       });
-      // for(var i = 0; i < listaSkladnikow.length; i++) {
-      //   var opt = listaSkladnikow[i];
-      //   var el = document.createElement("option");
-      //   el.textContent = opt;
-      //   el.value = opt;
-      //   select.appendChild(el);
-      // }
+
       var select = document.getElementById("selectCzynnosc"+(index+1));
       for(var i = 0; i < listaCzynnosci.length; i++) {
         var opt = listaCzynnosci[i];
@@ -402,19 +396,35 @@ function addEventListeners() {
     item.addEventListener('dragleave', dragLeave);
   });
 
- 
 }
 
 
-// var elements = document.getElementsByClassName("delBtn");
-// for (var i = 0; i < elements.length; i++) {
-//   elements[i].addEventListener('click', function(e){
-//     console.log(e.target.parentNode.parentNode.getAttribute("data-index"));
-//     deleteItem();
-
-//   }, false);
-// }
 check.addEventListener('click', checkOrder);
+var saveBtn=document.getElementById("save")
+
+function saveRecipe()
+{
+  generateListofItems()
+  let xhr = new XMLHttpRequest();
+  xhr.open("POST", "http://localhost:3000/editRecipe/saveEdited");
+  xhr.setRequestHeader("Accept", "application/json");
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4) {
+      console.log(xhr.status);
+      // console.log(xhr.responseText);
+    }};
+
+  let data = `{
+  "idPrzepisu": ${idPrzepisu},
+  "recipe": ${przepis}
+}`;
+
+  xhr.send(data);
+}
+
+saveBtn.addEventListener("click",saveRecipe,false)
 
 
 

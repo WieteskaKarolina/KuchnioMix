@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
+    <title>Twój przepis - dodaj/edytuj</title>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <link rel = "stylesheet" href="../styles/style.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT" crossorigin="anonymous">
+    <style>
+        .center {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 50vh;
+        }
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            /*overflow: hidden;*/
+            background-color: #eff1f3 ;
+        }
+
+        .carousel {
+            height: 100%;
+        }
+        .carousel-inner {
+            height: 100%;
+        }
+        .carousel-item {
+            height: 100%;
+        }
+        .carousel-item img {
+            object-fit: cover;
+            height: 100%;
+            width: 100%;
+        }
+        #save
+        {
+            text-decoration: none;
+        }
+        #save:hover
+        {
+            color: #34444f;
+        }
+    </style>
+</head>
+
+<body>
+<nav class="navbar navbar-expand-lg navbar-dark" style="background-color: rgb(209, 5, 5);">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">KuchnioMix</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/">Home</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="/recipe">Moje przepisy</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+
+
+
+<div class="main">
+    <h1>Stwórz swój własny przepis </h1>
+    <input type="text" id="recipeName" class="form-control" placeholder="podaj nazwe przpisu">
+    <ul class="draggable-list" id="draggable-list"></ul>
+    <button class="check-btn" id="check">
+        Dodaj krok
+        <i class="fas fa-paper-plane"></i>
+    </button>
+    <!--      href="http://localhost:3000/recipe/"-->
+    <br>
+    <a  class="check-btn" id="save">
+        zapisz przepis
+        <i class="fas fa-paper-plane"></i>
+    </a>
+</div>
+
+
+
+<script src="../scripts/create_recipe.js"></script>
+
+</body>
+</html>

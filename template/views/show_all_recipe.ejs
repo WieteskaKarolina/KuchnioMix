@@ -75,7 +75,11 @@
               <td><%= recipe.nazwa %></td>
               <td>
                 <a href="/recipe/<%= recipe.id %>/json" class="btn btn-primary">Pobierz JSON</a>
+                <a href="/editRecipe/<%= recipe.id %>" class="btn btn-primary">Edytuj przepis</a>
+                <a href="/editRecipe/deleteRecipe/<%= recipe.id %>" class="btn btn-primary">Usun przepis</a>
+
               </td>
+
             </tr>
           <% }); %>
         </tbody>
