@@ -29,8 +29,13 @@ router.post('/', async (req, res) => {
     }
 
     req.session.user = user;
+    // if (user.rola==='admin')
+    // {
+    //   console.log("admiiin")
+    //  // return res.redirect('/admin');
+    // }
 
-    return res.status(200).send('Logged in successfully');
+    return res.status(200).send(user.rola);
   } catch (error) {
     console.error('Error logging in', error);
     return res.status(500).send('Error logging in');

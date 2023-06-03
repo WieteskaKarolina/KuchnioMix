@@ -81,7 +81,14 @@
           data: $(this).serialize(),
           success: function(response) {
             $('#message').removeClass('text-danger').addClass('text-success').text(response).show();
-            window.location.href = '/';
+            if (response==="admin")
+            {
+              window.location.href = '/admin';
+            }else
+            {
+              window.location.href = '/';
+
+            }
           },
           error: function(xhr, status, error) {
             $('#message').removeClass('text-success').addClass('text-danger').text(xhr.responseText).show();
