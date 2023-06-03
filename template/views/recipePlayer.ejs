@@ -21,10 +21,9 @@
             height: 100%;
             margin: 0;
             padding: 0;
-            /*overflow: hidden;*/
-            background-color: #eff1f3 ;
+            overflow: hidden;
+            background-color: #eff1f3;
         }
-
         .carousel {
             height: 100%;
         }
@@ -39,14 +38,18 @@
             height: 100%;
             width: 100%;
         }
-        #save
-        {
-            text-decoration: none;
+
+         #myProgress {
+             width: 100%;
+             background-color: #ddd;
+         }
+
+        #myBar {
+            width: 1%;
+            height: 30px;
+            background-color: #04AA6D;
         }
-        #save:hover
-        {
-            color: #34444f;
-        }
+
     </style>
 </head>
 
@@ -76,44 +79,35 @@
     </div>
 </nav>
 
-<%
-    var productsEjs = JSON.stringify(products)
-    productsEjs="\'{"+productsEjs.substring(1,productsEjs.length-1)+"}\'"
-
-    var categoriesEjs = JSON.stringify(categories)
-    var unitsEjs = JSON.stringify(units)
-    var actionsEjs = JSON.stringify(actions)
-
-
-%>
+        <% var recipeEjs = JSON.stringify(recipe.przepisy)
+        var recipeIdEjs = idPrzepisu
+        recipeEjs="\'"+recipeEjs.substring(1,recipeEjs.length-1)+"\'"
+        %>
 <script>
-    let listaSkladnikoIrazKategori=<%-productsEjs%>;
-    let listaKategori=<%-categoriesEjs%>;
-    let listaJednostek=<%-unitsEjs%>;
-    let listaCzynnosci=<%-actionsEjs%>;
-
-
+    let przepis= <%-recipeEjs%>;
+    let idPrzepisu= <%-recipeIdEjs%>;
 </script>
 
-<div class="main">
-    <h1>Stwórz swój własny przepis </h1>
-    <input type="text" id="recipeName" class="form-control" placeholder="podaj nazwe przpisu">
-    <ul class="draggable-list" id="draggable-list"></ul>
-    <button class="check-btn" id="check">
-        Dodaj krok
-        <i class="fas fa-paper-plane"></i>
-    </button>
-    <!--      href="http://localhost:3000/recipe/"-->
+<div id="recipeScreen">
+    <div id="myProgress">
+        <div id="myBar"></div>
+    </div>
     <br>
-    <a  class="check-btn" id="save">
-        zapisz przepis
-        <i class="fas fa-paper-plane"></i>
-    </a>
+
+  <h1 id="descripton"></h1>
+
+    <button class="check-btn" id="nextBtn" onclick="loadNextStep()">
+        NEXT
+    </button>
+    <button class="check-btn" id="startBtn" onclick="startTimer()">
+        START
+    </button>
 </div>
 
 
 
-<script src="../scripts/create_recipe.js"></script>
+<script src="../scripts/recipePlayer.js"></script>
+
 
 </body>
 </html>

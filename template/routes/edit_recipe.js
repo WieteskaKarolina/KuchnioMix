@@ -9,7 +9,43 @@ router.get('/:id', async (req, res) => {
     const recipeId = req.params.id;
     try {
         var recipeToEdit = await sql`SELECT p.przepisy,p.id FROM przepisy p where p.id= ${recipeId}`;
-        res.render('recipe_edit', { recipe:recipeToEdit[0],idPrzepisu:recipeId });
+        var categoriesFromDb = await sql`SELECT nazwa FROM kategorie `;
+        var productsFromDb = await sql`SELECT skladnik,kategoria FROM skladniki `;
+        var unitsFromDb = await sql`SELECT nazwa FROM jednostki `;
+        var actionsFromDb = await sql`SELECT nazwa FROM czynnosci `;
+        var categories=[]
+        for(let i=0;i<categoriesFromDb.length;i++)
+        {
+            categories.push(categoriesFromDb[i].nazwa)
+        }
+
+        var units=[]
+        for(let i=0;i<unitsFromDb.length;i++)
+        {
+            units.push(unitsFromDb[i].nazwa)
+        }
+        var actions=[]
+        for(let i=0;i<actionsFromDb.length;i++)
+        {
+            actions.push(actionsFromDb[i].nazwa)
+        }
+        // console.log(units)
+
+        listaSkladnikoIrazKategori='{'+
+            ' "skladniki":['+
+            ' {"skladnik":"marchew", "kategoria":"sypkie"}'+
+            ' ]}'
+        var productsAndCategoriesJson = JSON.parse(listaSkladnikoIrazKategori);
+        productsAndCategoriesJson['skladniki']=[]
+        for(let i=0;i<productsFromDb.length;i++)
+        {
+            productsAndCategoriesJson['skladniki'].push({"skladnik":productsFromDb[i].skladnik,"kategoria":productsFromDb[i].kategoria})
+        }
+
+        // console.log(obj)
+
+
+        res.render('recipe_edit', { recipe:recipeToEdit[0],idPrzepisu:recipeId,categories:categories,products:productsAndCategoriesJson,units:units,actions:actions });
         // res.sendFile(oneStepBack + '/views/recipe_edit.ejs');
 
     }catch (error)

@@ -79,10 +79,26 @@
     <% var recipeEjs = JSON.stringify(recipe.przepisy)
       var recipeIdEjs = idPrzepisu
       recipeEjs="\'"+recipeEjs.substring(1,recipeEjs.length-1)+"\'"
+
+    var productsEjs = JSON.stringify(products)
+    productsEjs="\'{"+productsEjs.substring(1,productsEjs.length-1)+"}\'"
+
+    var categoriesEjs = JSON.stringify(categories)
+    var unitsEjs = JSON.stringify(units)
+    var actionsEjs = JSON.stringify(actions)
+
+
+
     %>
     <script>
       let przepis= <%-recipeEjs%>;
       let idPrzepisu= <%-recipeIdEjs%>;
+      console.log(<%- JSON.stringify(productsEjs)%>)
+
+      let listaSkladnikoIrazKategori=<%-productsEjs%>;
+      let listaKategori=<%-categoriesEjs%>;
+      let listaJednostek=<%-unitsEjs%>;
+      let listaCzynnosci=<%-actionsEjs%>;
     </script>
 
 

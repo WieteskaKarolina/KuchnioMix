@@ -8,6 +8,10 @@ const editRecipeRoute = require(__dirname + '/routes/edit_recipe');
 const addRecipeRoute = require(__dirname + '/routes/add_recipe');
 const addRecipeJsonRoute = require(__dirname + '/routes/add_recipe_json');
 const createRecipeRoute = require(__dirname + '/routes/create_recipe');
+const displayRecipeRoute = require(__dirname + '/routes/display_recipe');
+const adminRoute = require(__dirname + '/routes/admin');
+
+
 
 
 const path = require('path');
@@ -58,6 +62,9 @@ app.use('/addRecipe', checkAuthentication, addRecipeRoute);
 app.use('/editRecipe', checkAuthentication, editRecipeRoute);
 app.use('/addRecipeJson', addRecipeJsonRoute);
 app.use('/createRecipe', createRecipeRoute);
+app.use('/displayRecipe', displayRecipeRoute);
+app.use('/admin', adminRoute);
+
 
 
 app.listen(3000, () => {

@@ -77,43 +77,62 @@
 </nav>
 
 <%
-    var productsEjs = JSON.stringify(products)
-    productsEjs="\'{"+productsEjs.substring(1,productsEjs.length-1)+"}\'"
-
-    var categoriesEjs = JSON.stringify(categories)
-    var unitsEjs = JSON.stringify(units)
-    var actionsEjs = JSON.stringify(actions)
-
-
+var categoriesEjs = JSON.stringify(categories)
 %>
 <script>
-    let listaSkladnikoIrazKategori=<%-productsEjs%>;
     let listaKategori=<%-categoriesEjs%>;
-    let listaJednostek=<%-unitsEjs%>;
-    let listaCzynnosci=<%-actionsEjs%>;
-
-
 </script>
 
-<div class="main">
-    <h1>Stwórz swój własny przepis </h1>
-    <input type="text" id="recipeName" class="form-control" placeholder="podaj nazwe przpisu">
-    <ul class="draggable-list" id="draggable-list"></ul>
-    <button class="check-btn" id="check">
-        Dodaj krok
-        <i class="fas fa-paper-plane"></i>
-    </button>
-    <!--      href="http://localhost:3000/recipe/"-->
+<datalist id="datalistCategories">
+    <% categories.forEach((category) => { %>
+        <option value="<%= category %>"> </option>
+           <% }); %>
+</datalist>
+
+<h2>Dodaj produkt</h2>
+<form action="/admin/addProduct" method="post">
+    <div class="form-group">
+        <label for="categoryInput">Wybierz kategorie</label>
+        <input class="form-control" list="datalistCategories" id="categoryInput" name="categoryInput" placeholder="kategoria" autocomplete="off" required>
+    </div>
+    <div class="form-group">
+        <label for="productInput">Nazwa produktu</label>
+        <input type="text" class="form-control" id="productInput"  name="productInput" placeholder="produkt.." autocomplete="off" required>
+    </div>
     <br>
-    <a  class="check-btn" id="save">
-        zapisz przepis
-        <i class="fas fa-paper-plane"></i>
-    </a>
-</div>
+    <button type="ZAPISZ" class="btn btn-primary">Submit</button>
+</form>
 
+<h2>Dodaj kategorie</h2>
+<form action="/admin/addCategory" method="post">
+    <div class="form-group">
+        <label for="categoryInput">Nazwa kategori</label>
+        <input type="text" class="form-control" id="categoryInput" name="categoryInput" placeholder="kategoria.." autocomplete="off" required>
+    </div>
+    <br>
+    <button type="ZAPISZ" class="btn btn-primary">Submit</button>
+</form>
 
+<h2>Dodaj jednostke</h2>
+<form action="/admin/addUnit" method="post">
+    <div class="form-group">
+        <label for="unitInput">Nazwa jednostki</label>
+        <input type="text" class="form-control" id="unitInput" name="unitInput" placeholder="jednostka.." autocomplete="off" required>
+    </div>
+    <br>
+    <button type="ZAPISZ" class="btn btn-primary">Submit</button>
+</form>
 
-<script src="../scripts/create_recipe.js"></script>
+<h2>Dodaj czynnosc</h2>
+<form action="/admin/addAction" method="post">
+    <div class="form-group">
+        <label for="actionInput">Nazwa czynnosci</label>
+        <input type="text" class="form-control" id="actionInput" name="actionInput" placeholder="czynnosc.." autocomplete="off" required>
+    </div>
+    <br>
+    <button type="ZAPISZ" class="btn btn-primary">Submit</button>
+</form>
+
 
 </body>
 </html>

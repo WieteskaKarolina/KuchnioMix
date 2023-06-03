@@ -28,20 +28,20 @@ listOfItemsForJsonJednostki=[]
 listOfItemsForJsonIloscCzasu=[]
 
 
-listaJednostek=["kg","l","dg","-","ml","sztuki"]//tutaj przypisac dostepne jednostki z bazy danych
+// listaJednostek=["kg","l","dg","-","ml","sztuki"]//tutaj przypisac dostepne jednostki z bazy danych
 listaSkladnikow=["marchew","banan","koperek","-","mleko","mąka pszenna","woda","jajka","sól","cukier","olej"]//tutaj przypisac dostepe skladniki
-listaCzynnosci=["mieszaj","dodaj","miksuj","pokroj"]//tutaj przypisac dostepe skladniki
-listaKategori=["sypkie","ciekle","stale"]
-listaSkladnikoIrazKategori='{'+
-  ' "skladniki":['+
-  ' {"skladnik":"marchew", "kategoria":"sypkie"},'+
-  ' {"skladnik":"banan", "kategoria":"sypkie"},'+
-  ' {"skladnik":"mleko", "kategoria":"ciekle"},'+
-  ' {"skladnik":"woda", "kategoria":"ciekle"},'+
-  ' {"skladnik":"koperek", "kategoria":"stale"},'+
-  ' {"skladnik":"jajko", "kategoria":"stale"},'+
-  '  {"skladnik":"-", "kategoria":"-"}'+
-  ' ]}'
+// listaCzynnosci=["mieszaj","dodaj","miksuj","pokroj"]//tutaj przypisac dostepe skladniki
+// listaKategori=["sypkie","ciekle","stale"]
+// listaSkladnikoIrazKategori='{'+
+//   ' "skladniki":['+
+//   ' {"skladnik":"marchew", "kategoria":"sypkie"},'+
+//   ' {"skladnik":"banan", "kategoria":"sypkie"},'+
+//   ' {"skladnik":"mleko", "kategoria":"ciekle"},'+
+//   ' {"skladnik":"woda", "kategoria":"ciekle"},'+
+//   ' {"skladnik":"koperek", "kategoria":"stale"},'+
+//   ' {"skladnik":"jajko", "kategoria":"stale"},'+
+//   '  {"skladnik":"-", "kategoria":"-"}'+
+//   ' ]}'
 
 var jsonSkladniki=JSON.parse(listaSkladnikoIrazKategori)
 
@@ -413,6 +413,7 @@ function saveRecipe()
   xhr.onreadystatechange = function () {
     if (xhr.readyState === 4) {
       console.log(xhr.status);
+      location.replace("http://localhost:3000/recipe")
       // console.log(xhr.responseText);
     }};
 
@@ -422,6 +423,7 @@ function saveRecipe()
 }`;
 
   xhr.send(data);
+
 }
 
 saveBtn.addEventListener("click",saveRecipe,false)
