@@ -8,6 +8,18 @@ let oneStepBack = path.join(__dirname,'../');
 router.get('/', async (req, res) => {
     try
     {
+        let user_role= req.session.user.rola
+        if (user_role!=="admin")
+        {
+            return res.redirect("recipe")
+        }
+    }catch (error)
+    {
+        return res.redirect("recipe")
+    }
+
+    try
+    {
         var categoriesFromDb = await sql`SELECT nazwa FROM kategorie `;
 
         var categories=[]
@@ -25,6 +37,7 @@ router.get('/', async (req, res) => {
 
 });
 router.post('/addProduct', async (req, res) => {
+
     const categoryInput = req.body.categoryInput;
     const productInput = req.body.productInput;
     try {
